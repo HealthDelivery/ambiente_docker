@@ -1,0 +1,28 @@
+version: '3'
+
+volumes: 
+   postgres_data:
+      driver: local
+
+services:
+   rabbitmq: 
+      image: rabbitmq:3-management
+      container_name: health_delivery_message_bus
+      expose:
+        - 5672
+      ports:
+        - 15672:15672
+      environment:
+          RABBITMQ_DEFAULT_USER: "bus"
+          RABBITMQ_DEFAULT_PASS: "bus"  
+   keycloak:
+      image: quay.io/keycloak/keycloak:18.0.0
+      container_name: health_delivery_sso
+      environment:
+          KEYCLOAK_ADMIN: admin
+          KEYCLOAK_ADMIN_PASSWORD: Pa55w0rd
+      command:
+          - start-dev
+      ports:
+          - 8080:8080
+    

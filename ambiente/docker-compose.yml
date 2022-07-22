@@ -5,24 +5,37 @@ volumes:
       driver: local
 
 services:
-   rabbitmq: 
-      image: rabbitmq:3-management
-      container_name: health_delivery_message_bus
-      expose:
-        - 5672
-      ports:
-        - 15672:15672
-      environment:
-          RABBITMQ_DEFAULT_USER: "bus"
-          RABBITMQ_DEFAULT_PASS: "bus"  
-   keycloak:
-      image: quay.io/keycloak/keycloak:18.0.0
-      container_name: health_delivery_sso
-      environment:
-          KEYCLOAK_ADMIN: admin
-          KEYCLOAK_ADMIN_PASSWORD: Pa55w0rd
-      command:
-          - start-dev
-      ports:
-          - 8080:8080
-    
+  rabbitmq: 
+    image: rabbitmq:3-management
+    container_name: health_delivery_message_bus
+    expose:
+      - 5672
+    ports:
+      - 15672:15672
+    environment:
+        RABBITMQ_DEFAULT_USER: "bus"
+        RABBITMQ_DEFAULT_PASS: "bus"  
+  keycloak:
+    image: quay.io/keycloak/keycloak:18.0.0
+    container_name: health_delivery_sso
+    environment:
+        KEYCLOAK_ADMIN: admin
+        KEYCLOAK_ADMIN_PASSWORD: Pa55w0rd
+    command:
+        - start-dev
+    ports:
+        - 8080:8080
+  alimentos-db:
+    image: postgres:10.5
+    restart: always
+    environment: 
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    logging:
+          options:
+            max-size: 10m
+            max-file: "3"
+    ports:
+          - '5438:5432'
+    volumes:
+          - ./postgres-data:/var/lib/postgresql/data 

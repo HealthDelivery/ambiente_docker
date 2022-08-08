@@ -39,3 +39,11 @@ services:
           - '5438:5432'
     volumes:
           - ./postgres-data:/var/lib/postgresql/data 
+  alimentos-service:
+    image: "conradocabelo/hdl-servicos-alimentos"
+    ports:
+      - '8001:80'    
+    environment:
+      - DATA_BASE_CONNECTION="Host=alimentos-db;Port=5432;Username=postgres;Password=postgres;Database=hdl_alimentos"
+    depends_on:
+      - alimentos-db
